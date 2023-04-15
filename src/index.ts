@@ -145,7 +145,6 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
     })
 
     return {
-      mounted,
       visible,
       show: () => _toggle(true),
       hide: () => _toggle(false),
