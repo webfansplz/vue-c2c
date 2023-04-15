@@ -137,7 +137,7 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
       container.value!.style.display = 'none'
     }
 
-    watch(props, () => {
+    watch(() => unref(props), () => {
       mounted.value && _destroy()
       _toggle(visible.value)
     }, {
