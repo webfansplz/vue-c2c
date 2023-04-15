@@ -12,6 +12,28 @@ npm i vue-c2c
 
 ### c2c
 
+#### Options
+
+```ts
+interface VueC2COptions {
+  /**
+   * Display style of the component.
+   * @default 'v-if'
+   */
+  display?: 'v-if' | 'v-show'
+  /**
+   * Display style of the component.
+   * @default false
+   */
+  visible?: boolean
+  /**
+   * Function that returns an HTMLElement where the component should be appended to.
+   * @default ()=> document.body
+   */
+  appendTo?: () => HTMLElement
+}
+```
+
 ```html
 <script setup>
   import { c2c } from 'vue-c2c'
@@ -24,6 +46,21 @@ npm i vue-c2c
 ```
 
 ### c2cWithTemplate
+
+```ts
+interface VueC2CWithTemplateOptions {
+  /**
+   * Display style of the component.
+   * @default 'v-if'
+   */
+  display?: 'v-if' | 'v-show'
+  /**
+   * Display style of the component.
+   * @default true
+   */
+  visible?: boolean
+}
+```
 
 ```html
 <script setup>
