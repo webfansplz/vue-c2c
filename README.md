@@ -1,6 +1,10 @@
 # vue-c2c
+
 Transforming Vue components to composable functions.
 
+## When should I use this?
+
+In certain use cases (e.g. Confirm、Dialog), composable functions can provide greater flexibility and ease of use than components. 
 
 ## Install
 
@@ -88,3 +92,7 @@ interface VueC2CWithTemplateOptions {
   </Placeholder>
 </template>
 ```
+
+## License
+
+[MIT](./LICENSE) License © 2023
