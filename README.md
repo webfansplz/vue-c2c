@@ -6,6 +6,10 @@ Transforming Vue components to composable functions.
 
 In certain use cases (e.g. Confirm、Dialog), composable functions can provide greater flexibility and ease of use than components. 
 
+<p align="left">
+  <a href="https://github.com/webfansplz/vue-c2c"><img src="./vue-c2c.png" alt="vue-c2c"></a>
+</p>
+
 ## Install
 
 ```bash
