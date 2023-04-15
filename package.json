@@ -14,7 +14,12 @@
   "bugs": {
     "url": "https://github.com/webfansplz/vue-c2c/issues"
   },
-  "keywords": ["components", "composbales", "vue3", "vue"],
+  "keywords": [
+    "components",
+    "composbales",
+    "vue3",
+    "vue"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
