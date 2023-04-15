@@ -47,6 +47,8 @@
     "dev": "unbuild --stub",
     "lint": "eslint .",
     "play": "nr -C playground dev",
+    "play:example": "nr -C examples/c2c dev",
+    "play:example2": "nr -C examples/c2c-with-template dev",
     "prepublishOnly": "nr build",
     "release": "bumpp && npm publish",
     "start": "esno src/index.ts",
