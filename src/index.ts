@@ -108,7 +108,7 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
   const isClient = typeof window !== 'undefined'
 
   // Providing an 'emit' option for better callability makes sense, even if it already exists in props.
-  function composable(props: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) {
+  function composable(props: ComponentPropTypes<T> = {}, opt?: VueC2CComposableOptions<T>) {
     const container = ref<HTMLElement | null>(null)
     const mounted = ref(false)
     const visible = ref(options.visible ?? false)
