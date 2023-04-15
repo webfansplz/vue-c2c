@@ -47,6 +47,16 @@ interface VueC2COptions {
 
 ### c2cWithTemplate
 
+`c2cTemplate` is like `c2c`, but provides two additional features: 
+
+- Element placeholder: 
+
+  > The element placeholder functionality allows us to specify the location of created elements in a more flexible manner.
+
+- Friendly SSR support:
+  
+  > If you're working on an SSR project (e.g. Nuxt), use `c2cTemplate` for better SSR support.
+
 ```ts
 interface VueC2CWithTemplateOptions {
   /**
