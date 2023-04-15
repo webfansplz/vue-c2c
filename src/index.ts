@@ -1,21 +1,39 @@
 import { createCommentVNode, createVNode, defineComponent, ref, render, shallowRef, unref, vShow, watch, withDirectives } from 'vue'
 import type { Ref } from 'vue'
 
-interface VueC2CBaseOptions {
-  display?: 'v-if' | 'v-show'
-  visible?: boolean
-}
-
 type MaybeRef<T> = T | Ref<T>
 
 type ComponentPropTypes<T extends abstract new (...args: any) => any> = MaybeRef<InstanceType<T>['$props']>
 
-export interface VueC2COptions extends VueC2CBaseOptions {
-  getContainer?: () => HTMLElement
+export interface VueC2COptions {
+  /**
+   * Display style of the component.
+   * @default 'v-if'
+   */
+  display?: 'v-if' | 'v-show'
+  /**
+   * Display style of the component.
+   * @default false
+   */
+  visible?: boolean
+  /**
+   * Function that returns an HTMLElement where the component should be appended to.
+   * @default ()=> document.body
+   */
   appendTo?: () => HTMLElement
 }
 
-export interface VueC2CWithTemplateOptions extends VueC2CBaseOptions {
+export interface VueC2CWithTemplateOptions {
+  /**
+   * Display style of the component.
+   * @default 'v-if'
+   */
+  display?: 'v-if' | 'v-show'
+  /**
+   * Display style of the component.
+   * @default true
+   */
+  visible?: boolean
 }
 
 export function c2cWithTemplate<T extends abstract new (...args: any) => any>(componentConstructor: T, options: VueC2CWithTemplateOptions = {}) {
@@ -70,7 +88,6 @@ export function c2cWithTemplate<T extends abstract new (...args: any) => any>(co
 export function c2c<T extends abstract new (...args: any) => any>(componentConstructor: T, options: VueC2COptions = {}) {
   const {
     appendTo = () => document.body,
-    getContainer = () => document.createElement('div'),
     display = 'v-if',
   } = options
 
@@ -94,7 +111,7 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
     }
 
     function _mount() {
-      container.value = getContainer()
+      container.value = document.createElement('div')
       const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, unref(props))
       render(vnode, container.value)
       appendTo().appendChild(container.value)
