@@ -49,6 +49,8 @@ interface VueC2COptions {
 </script>
 ```
 
+#### [Example](./examples/c2c)
+
 ### c2cWithTemplate
 
 `c2cTemplate` is like `c2c`, but provides two additional features: 
@@ -92,6 +94,9 @@ interface VueC2CWithTemplateOptions {
   </Placeholder>
 </template>
 ```
+
+#### [Example](./examples/c2c-with-template)
+
 
 ## License
 
