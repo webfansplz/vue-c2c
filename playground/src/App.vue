@@ -1,42 +1,40 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { c2c } from '../../src'
-import Dialog from './components/Dialog.vue'
+import Confirm from './components/Confirm.vue'
 
-// const useDialog = c2c(Dialog)
+const useConfirm = c2c(Confirm)
 
-// const { mounted, mount, destroy, template: Placeholder, show, hide, visible } = useDialog()
-
-// const useDialog = c2cWithTemplate(Dialog, { display: 'v-show' })
-
-const useDialog = c2c(Dialog)
-
-const p = ref({
+const props = ref({
   content: 'Hi',
-  color: 'red',
 })
 
-// const { template: Placeholder, show, hide, visible } = useDialog(p)
-
-const { show, hide, visible } = useDialog(p)
+const { show, hide, visible, exposed } = useConfirm(props, {
+  emit: {
+    onCancel() {
+      exposed.value?.updateCancelText()
+      setTimeout(() => {
+        hide()
+      }, 800)
+    },
+    onSubmit() {
+      props.value.content = 'Hello World!'
+      setTimeout(() => {
+        hide()
+      }, 800)
+    },
+  },
+})
 
 function toggle() {
   visible.value ? hide() : show()
-  setTimeout(() => {
-    p.value.content = 'World'
-    p.value.color = 'blue'
-  }, 3000)
 }
 </script>
 
 <template>
-  <!-- <Placeholder>
-    444
-    <template #title>
-      Title
-    </template>
-  </Placeholder> -->
-  <div @click="toggle">
-    123
+  <div w-screen h-screen flex items-center justify-center>
+    <button w-30 h-12 text-6 rounded-2 border-1 cursor-pointer bg-white hover="bg-#f8f8f8" @click="toggle">
+      Toggle
+    </button>
   </div>
 </template>
