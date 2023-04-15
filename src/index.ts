@@ -1,11 +1,19 @@
-import { createCommentVNode, createVNode, defineComponent, ref, render, shallowRef, unref, vShow, watch, withDirectives } from 'vue'
+import { createCommentVNode, createVNode, defineComponent, nextTick, ref, render, shallowRef, unref, vShow, watch, withDirectives } from 'vue'
 import type { Ref } from 'vue'
 
 type MaybeRef<T> = T | Ref<T>
 
 type ComponentPropTypes<T extends abstract new (...args: any) => any> = MaybeRef<InstanceType<T>['$props']>
 
-export interface VueC2COptions {
+type GetEmitTypes<T extends Record<any, any>> = {
+  [K in keyof T as K extends `on${Capitalize<infer P>}` ? K : never]: T[K] extends Record<any, any> ? GetEmitTypes<T[K]> : T[K]
+}
+
+export interface VueC2CComposableOptions<T extends abstract new (...args: any) => any> {
+  emit?: GetEmitTypes<InstanceType<T>['$props']>
+}
+
+interface VueC2CBaseOptions {
   /**
    * Display style of the component.
    * @default 'v-if'
@@ -16,6 +24,10 @@ export interface VueC2COptions {
    * @default false
    */
   visible?: boolean
+}
+
+export interface VueC2COptions extends VueC2CBaseOptions {
+
   /**
    * Function that returns an HTMLElement where the component should be appended to.
    * @default ()=> document.body
@@ -23,32 +35,27 @@ export interface VueC2COptions {
   appendTo?: () => HTMLElement
 }
 
-export interface VueC2CWithTemplateOptions {
-  /**
-   * Display style of the component.
-   * @default 'v-if'
-   */
-  display?: 'v-if' | 'v-show'
-  /**
-   * Display style of the component.
-   * @default true
-   */
-  visible?: boolean
-}
+export interface VueC2CWithTemplateOptions extends VueC2CBaseOptions { }
 
 export function c2cWithTemplate<T extends abstract new (...args: any) => any>(componentConstructor: T, options: VueC2CWithTemplateOptions = {}) {
   const {
     display = 'v-if',
   } = options
-  function composable(props: ComponentPropTypes<T> = {}) {
+
+  // Providing an 'emit' option for better callability makes sense, even if it already exists in props.
+  function composable(props: ComponentPropTypes<T> = {}, opt?: VueC2CComposableOptions<T>) {
     const template = shallowRef()
-    const visible = ref(options.visible ?? true)
+    const visible = ref(options.visible ?? false)
+    const exposed = ref()
 
     if (display === 'v-if') {
       template.value = defineComponent({
         setup(_, { slots }) {
           return () => {
-            const vnode = visible.value ? createVNode(componentConstructor as ComponentPropTypes<T>, unref(props), slots) : createCommentVNode('v-if', true)
+            const vnode = visible.value ? createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit }, slots) : createCommentVNode('v-if', true)
+            nextTick(() => {
+              exposed.value = vnode.component?.exposed ?? {}
+            })
             return [vnode]
           }
         },
@@ -58,7 +65,10 @@ export function c2cWithTemplate<T extends abstract new (...args: any) => any>(co
       template.value = defineComponent({
         setup(_, { slots }) {
           return () => {
-            const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, unref(props), slots)
+            const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit }, slots)
+            nextTick(() => {
+              exposed.value = vnode.component?.exposed ?? {}
+            })
             return withDirectives(vnode, [
               [vShow, visible.value],
             ])
@@ -76,9 +86,13 @@ export function c2cWithTemplate<T extends abstract new (...args: any) => any>(co
     }
 
     return {
+      exposed,
       visible,
       show,
       hide,
+      toggle() {
+        visible.value = !visible.value
+      },
       template,
     }
   }
@@ -93,10 +107,14 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
 
   const isClient = typeof window !== 'undefined'
 
-  function composable(props: ComponentPropTypes<T> = {}) {
-    const container = ref<Element | null>(null)
+  // Providing an 'emit' option for better callability makes sense, even if it already exists in props.
+  function composable(props: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) {
+    const container = ref<HTMLElement | null>(null)
     const mounted = ref(false)
     const visible = ref(options.visible ?? false)
+    const exposed = ref()
+    const ele = ref<HTMLElement | null>(null)
+    const displayStyle = ref('unset')
 
     if (visible.value && isClient)
       _toggle(true)
@@ -111,9 +129,11 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
     }
 
     function _mount() {
-      container.value = document.createDocumentFragment() as unknown as Element
-      const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, unref(props))
+      container.value = document.createDocumentFragment() as unknown as HTMLElement
+      const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit })
       render(vnode, container.value!)
+      ele.value = vnode.el as HTMLElement
+      exposed.value = vnode.component?.exposed ?? {}
       appendTo().appendChild(container.value!)
       mounted.value = true
     }
@@ -129,12 +149,13 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
         _mount()
 
       else
-        container.value!.style.display = 'unset'
+        ele.value!.style.display = displayStyle.value
     }
 
     function _hide() {
       visible.value = false
-      container.value!.style.display = 'none'
+      displayStyle.value = ele.value?.style?.display ?? 'unset'
+      ele.value!.style.display = 'none'
     }
 
     watch(() => unref(props), () => {
@@ -145,7 +166,9 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
     })
 
     return {
+      exposed,
       visible,
+      toggle: () => _toggle(!visible.value),
       show: () => _toggle(true),
       hide: () => _toggle(false),
     }
