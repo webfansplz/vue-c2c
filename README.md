@@ -45,7 +45,7 @@ interface VueC2COptions {
 
   const useDialog = c2c(Dialog)
 
-  const { visible, show, hide } = useDialog(props)
+  const { visible, show, hide, toggle, exposed } = useDialog(props)
 </script>
 ```
 
@@ -70,7 +70,7 @@ interface VueC2CWithTemplateOptions {
   display?: 'v-if' | 'v-show'
   /**
    * Display style of the component.
-   * @default true
+   * @default false
    */
   visible?: boolean
 }
@@ -83,7 +83,7 @@ interface VueC2CWithTemplateOptions {
 
   const useDialog = c2cWithTemplate(Dialog)
 
-  const { template: Placeholder, visible, show, hide } = useDialog(props)
+  const { template: Placeholder, visible, show, hide, toggle, exposed } = useDialog(props)
 </script>
 
 <template>
