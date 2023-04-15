@@ -94,7 +94,7 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
   const isClient = typeof window !== 'undefined'
 
   function composable(props: ComponentPropTypes<T> = {}) {
-    const container = ref<HTMLElement | null>(null)
+    const container = ref<Element | null>(null)
     const mounted = ref(false)
     const visible = ref(options.visible ?? false)
 
@@ -111,10 +111,10 @@ export function c2c<T extends abstract new (...args: any) => any>(componentConst
     }
 
     function _mount() {
-      container.value = document.createElement('div')
+      container.value = document.createDocumentFragment() as unknown as Element
       const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, unref(props))
-      render(vnode, container.value)
-      appendTo().appendChild(container.value)
+      render(vnode, container.value!)
+      appendTo().appendChild(container.value!)
       mounted.value = true
     }
 
