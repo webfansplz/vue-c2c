@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
-import { c2c, c2cWithTemplate } from '../src'
+import { c2c } from '../src'
 
 const Confirm = defineComponent({
   props: {
@@ -25,12 +25,14 @@ it('should work', () => {
   expect(visible.value).toBe(true)
 })
 
-it('should work w/ c2cWithTemplate', async () => {
-  const useConfirm = c2cWithTemplate(Confirm)
+it('should work w/ withPlaceholder option', async () => {
+  const useConfirm = c2c(Confirm, {
+    withPlaceholder: true,
+  })
   const props = ref({
     content: 'Hi',
   })
-  const { toggle, template: Placeholder } = useConfirm(props)
+  const { toggle, Placeholder } = useConfirm(props)
 
   const wrapper = mount({
     render() {
