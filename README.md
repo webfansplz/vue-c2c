@@ -1,8 +1,8 @@
 <h1 align="center">vue-c2c</h1>
 
 <p align="center">
-<b>Transforming Vue components to composable functions <br/>
- Draw UI with components, Access/Control with composables</b>
+<b>Transforming Vue components to composable functions</b><br/>
+ (Draw UI with components, Access/Control with composables)
 </p>
 
 <p align="center">
