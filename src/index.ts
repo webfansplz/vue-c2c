@@ -19,7 +19,7 @@ export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?
 
 // implementation
 export function c2c<T extends ComponentType>(componentConstructor: T, options?: VueC2COptions<boolean>): VueC2CReturn<T, boolean> {
-  return options?.withPlaceholder ? _c2cWithComponent(componentConstructor, options as VueC2COptions<true>) : _c2c(componentConstructor, options as VueC2COptions<false>)
+  return options?.withPlaceholder ? _c2cWithPlaceholder(componentConstructor, options as VueC2COptions<true>) : _c2c(componentConstructor, options as VueC2COptions<false>)
 }
 
 function _c2c<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<false> = {}): VueC2CReturn<T, boolean> {
@@ -99,7 +99,7 @@ function _c2c<T extends ComponentType>(componentConstructor: T, options: VueC2CO
   return composable
 }
 
-function _c2cWithComponent<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<true> = {}): VueC2CReturn<T, boolean> {
+function _c2cWithPlaceholder<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<true> = {}): VueC2CReturn<T, boolean> {
   const {
     display = 'v-if',
   } = options
