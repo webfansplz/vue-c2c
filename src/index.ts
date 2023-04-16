@@ -1,9 +1,28 @@
 import { createCommentVNode, createVNode, defineComponent, nextTick, ref, render, shallowRef, unref, vShow, watch, withDirectives } from 'vue'
-import type { FunctionalComponent, Ref, ShallowRef } from 'vue'
+import type {
+  ComponentPropTypes,
+  ComponentType,
+  VueC2CComponent,
+  VueC2CComposableOptions,
+  VueC2CFunctionalComponent,
+  VueC2COptions,
+  VueC2CReturn,
+} from './type'
 
-export function c2c<T extends FunctionalComponent<any>>(componentConstructor: T, options?: VueC2COptions): VueC2CReturn<T>
-export function c2c<T extends abstract new (...args: any) => any>(componentConstructor: T, options?: VueC2COptions): VueC2CReturn<T>
-export function c2c<T extends ComponentType>(componentConstructor: T, options: VueC2COptions = {}): VueC2CReturn<T> {
+export type { VueC2COptions, VueC2CReturn } from './type'
+
+// overloads
+export function c2c<T extends VueC2CFunctionalComponent>(componentConstructor: T, options?: VueC2COptions<false>): VueC2CReturn<T, false>
+export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?: VueC2COptions<false>): VueC2CReturn<T, false>
+export function c2c<T extends VueC2CFunctionalComponent>(componentConstructor: T, options?: VueC2COptions<true>): VueC2CReturn<T, true>
+export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?: VueC2COptions<true>): VueC2CReturn<T, true>
+
+// implementation
+export function c2c<T extends ComponentType>(componentConstructor: T, options?: VueC2COptions<boolean>): VueC2CReturn<T, boolean> {
+  return options?.withComponent ? _c2cWithComponent(componentConstructor, options as VueC2COptions<true>) : _c2c(componentConstructor, options as VueC2COptions<false>)
+}
+
+function _c2c<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<false> = {}): VueC2CReturn<T, boolean> {
   const {
     appendTo = () => document.body,
     display = 'v-if',
@@ -80,20 +99,18 @@ export function c2c<T extends ComponentType>(componentConstructor: T, options: V
   return composable
 }
 
-export function c2cWithTemplate<T extends FunctionalComponent<any>>(componentConstructor: T, options?: VueC2COptions): VueC2CWithTemplateCReturn<T>
-export function c2cWithTemplate<T extends abstract new (...args: any) => any>(componentConstructor: T, options?: VueC2COptions): VueC2CWithTemplateCReturn<T>
-export function c2cWithTemplate<T extends ComponentType>(componentConstructor: T, options: VueC2CWithTemplateOptions = {}): VueC2CWithTemplateCReturn<T> {
+function _c2cWithComponent<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<true> = {}): VueC2CReturn<T, boolean> {
   const {
     display = 'v-if',
   } = options
 
   function composable(props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) {
-    const template = shallowRef()
+    const VComponent = shallowRef()
     const visible = ref(options.visible ?? false)
     const exposed = ref()
 
     if (display === 'v-if') {
-      template.value = defineComponent({
+      VComponent.value = defineComponent({
         setup(_, { slots }) {
           return () => {
             // Providing an 'emits' option for better callability makes sense, even if it already exists in props.
@@ -107,7 +124,7 @@ export function c2cWithTemplate<T extends ComponentType>(componentConstructor: T
       })
     }
     else {
-      template.value = defineComponent({
+      VComponent.value = defineComponent({
         setup(_, { slots }) {
           return () => {
             const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emits }, slots)
@@ -140,59 +157,8 @@ export function c2cWithTemplate<T extends ComponentType>(componentConstructor: T
       show,
       hide,
       toggle,
-      template,
+      VComponent,
     }
   }
   return composable
 }
-
-interface VueC2CBaseOptions {
-  /**
-   * Display style of the component.
-   * @default 'v-if'
-   */
-  display?: 'v-if' | 'v-show'
-  /**
-   * Display style of the component.
-   * @default false
-   */
-  visible?: boolean
-}
-
-export interface VueC2COptions extends VueC2CBaseOptions {
-
-  /**
-   * Function that returns an HTMLElement where the component should be appended to.
-   * @default ()=> document.body
-   */
-  appendTo?: () => HTMLElement
-}
-
-export interface VueC2CWithTemplateOptions extends VueC2CBaseOptions { }
-
-export interface VueC2CComposableReturn {
-  exposed: Ref<any>
-  visible: Ref<boolean>
-  show: () => void
-  hide: () => void
-  toggle: () => void
-}
-
-type MaybeRef<T> = T | Ref<T>
-
-type ComponentType = ((abstract new (...args: any) => any) | FunctionalComponent<any>)
-
-type ComponentEmitTypes<T extends Record<any, any>> = {
-  [K in keyof T as K extends `on${Capitalize<infer P>}` ? K : never]: T[K] extends Record<any, any> ? ComponentEmitTypes<T[K]> : T[K]
-}
-
-type ComponentPropTypes<T extends ComponentType> =
-  T extends abstract new (...args: any) => any ? MaybeRef<InstanceType<T>['$props']> : T extends FunctionalComponent<infer P> ? P : Record<any, any>
-
-export interface VueC2CComposableOptions<T extends ComponentType> {
-  emits?: ComponentEmitTypes<T extends abstract new (...args: any) => any ? InstanceType<T>['$props'] : T extends FunctionalComponent<infer P> ? P : Record<any, any>>
-}
-
-export type VueC2CReturn<T extends ComponentType> = (props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) => VueC2CComposableReturn
-
-export type VueC2CWithTemplateCReturn<T extends ComponentType> = (props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) => VueC2CComposableReturn & { template: ShallowRef<any> }
