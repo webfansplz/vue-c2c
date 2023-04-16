@@ -1,6 +1,4 @@
-<p align="center">
- <h1>vue-c2c</h1>
-</p>
+<h1 align="center">vue-c2c</h1>
 
 <p align="center">
 <b>Transforming Vue components to composable functions <br/>
@@ -17,7 +15,7 @@
 In certain use cases (e.g. Confirm、Dialog), composable functions can provide greater flexibility and ease of use than components. 
 
 <p align="left">
-  <a href="https://github.com/webfansplz/vue-c2c"><img src="./vue-c2c.png" alt="vue-c2c"></a>
+  <img src="./vue-c2c.png" alt="vue-c2c" />
 </p>
 
 ## Install
