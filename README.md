@@ -49,7 +49,13 @@ interface VueC2COptions {
    */
   visible?: boolean
   /**
+   * Return a placeholder component that allows specifying the insertion position.
+   * @default false
+   */
+  withPlaceholder?: T
+  /**
    * Function that returns an HTMLElement where the component should be appended to.
+   * Only applies if `withPlaceholder` option is false.
    * @default ()=> document.body
    */
   appendTo?: () => HTMLElement
@@ -74,9 +80,9 @@ interface VueC2COptions {
 
 #### [Example](./examples/c2c)
 
-### c2cWithTemplate
+### `withPlaceholder` Option
 
-`c2cTemplate` is like `c2c`, but provides two additional features: 
+`withPlaceholder` option provides two additional features: 
 
 - Element placeholder: 
 
@@ -86,29 +92,16 @@ interface VueC2COptions {
   
   > If you're working on an SSR project (e.g. Nuxt), use `c2cTemplate` for better SSR support.
 
-```ts
-interface VueC2CWithTemplateOptions {
-  /**
-   * Display style of the component.
-   * @default 'v-if'
-   */
-  display?: 'v-if' | 'v-show'
-  /**
-   * Display style of the component.
-   * @default false
-   */
-  visible?: boolean
-}
-```
-
 ```html
 <script setup>
   import { c2cWithTemplate } from 'vue-c2c'
   import Dialog from './Dialog.vue'
 
-  const useDialog = c2cWithTemplate(Dialog, VueC2CWithTemplateOptions)
+  const useDialog = c2cWithTemplate(Dialog, {
+    withPlaceholder: true,
+  })
 
-  const { template: Placeholder, visible, show, hide, toggle, exposed } = useDialog(props, {
+  const { Placeholder, visible, show, hide, toggle, exposed } = useDialog(props, {
     emits: {
       onOk: () => {},
       onCancel: () => {},
@@ -123,7 +116,7 @@ interface VueC2CWithTemplateOptions {
 </template>
 ```
 
-#### [Example](./examples/c2c-with-template)
+#### [Example](./examples/c2c-with-component)
 
 
 ## License
