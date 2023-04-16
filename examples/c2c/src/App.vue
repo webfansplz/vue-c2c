@@ -10,7 +10,7 @@ const props = ref({
 })
 
 const { show, hide, visible, exposed } = useConfirm(props, {
-  emit: {
+  emits: {
     onCancel() {
       exposed.value?.updateCancelText()
       setTimeout(() => {

@@ -20,7 +20,7 @@ const props = ref({
 // const { toggle, template: Placeholder } = useFC({
 //   content: 'Hi',
 // }, {
-//   emit: {
+//   emits: {
 //     onUpdate() {
 //       console.log('click')
 //     },
@@ -28,7 +28,7 @@ const props = ref({
 // })
 
 const { show, hide, visible, exposed } = useConfirm(props, {
-  emit: {
+  emits: {
     onCancel() {
       exposed.value?.updateCancelText()
       setTimeout(() => {
