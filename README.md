@@ -116,7 +116,7 @@ interface VueC2COptions {
 </template>
 ```
 
-#### [Example](./examples/c2c-with-component)
+#### [Example](./examples/c2c-with-placeholder)
 
 
 ## License
