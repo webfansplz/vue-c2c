@@ -90,14 +90,14 @@ interface VueC2COptions {
 
 - Friendly SSR support:
   
-  > If you're working on an SSR project (e.g. Nuxt), use `c2cTemplate` for better SSR support.
+  > If you're working on an SSR project (e.g. Nuxt), use `withPlaceholder` option for better SSR support.
 
 ```html
 <script setup>
-  import { c2cWithTemplate } from 'vue-c2c'
+  import { c2c } from 'vue-c2c'
   import Dialog from './Dialog.vue'
 
-  const useDialog = c2cWithTemplate(Dialog, {
+  const useDialog = c2c(Dialog, {
     withPlaceholder: true,
   })
 
