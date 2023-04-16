@@ -33,8 +33,8 @@ export function c2c<T extends ComponentType>(componentConstructor: T, options: V
 
     function _mount() {
       container.value = document.createDocumentFragment() as unknown as HTMLElement
-      // Providing an 'emit' option for better callability makes sense, even if it already exists in props.
-      const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit })
+      // Providing an 'emits' option for better callability makes sense, even if it already exists in props.
+      const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emits })
       render(vnode, container.value!)
       ele.value = vnode.el as HTMLElement
       exposed.value = vnode.component?.exposed ?? {}
@@ -96,8 +96,8 @@ export function c2cWithTemplate<T extends ComponentType>(componentConstructor: T
       template.value = defineComponent({
         setup(_, { slots }) {
           return () => {
-            // Providing an 'emit' option for better callability makes sense, even if it already exists in props.
-            const vnode = visible.value ? createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit }, slots) : createCommentVNode('v-if', true)
+            // Providing an 'emits' option for better callability makes sense, even if it already exists in props.
+            const vnode = visible.value ? createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emits }, slots) : createCommentVNode('v-if', true)
             nextTick(() => {
               exposed.value = vnode.component?.exposed ?? {}
             })
@@ -110,7 +110,7 @@ export function c2cWithTemplate<T extends ComponentType>(componentConstructor: T
       template.value = defineComponent({
         setup(_, { slots }) {
           return () => {
-            const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emit }, slots)
+            const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emits }, slots)
             nextTick(() => {
               exposed.value = vnode.component?.exposed ?? {}
             })
@@ -190,7 +190,7 @@ type ComponentPropTypes<T extends ComponentType> =
   T extends abstract new (...args: any) => any ? MaybeRef<InstanceType<T>['$props']> : T extends FunctionalComponent<infer P> ? P : Record<any, any>
 
 export interface VueC2CComposableOptions<T extends ComponentType> {
-  emit?: ComponentEmitTypes<T extends abstract new (...args: any) => any ? InstanceType<T>['$props'] : T extends FunctionalComponent<infer P> ? P : Record<any, any>>
+  emits?: ComponentEmitTypes<T extends abstract new (...args: any) => any ? InstanceType<T>['$props'] : T extends FunctionalComponent<infer P> ? P : Record<any, any>>
 }
 
 export type VueC2CReturn<T extends ComponentType> = (props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) => VueC2CComposableReturn
