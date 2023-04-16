@@ -61,9 +61,14 @@ interface VueC2COptions {
   import { c2c } from 'vue-c2c'
   import Dialog from './Dialog.vue'
 
-  const useDialog = c2c(Dialog)
+  const useDialog = c2c(Dialog, VueC2COptions)
 
-  const { visible, show, hide, toggle, exposed } = useDialog(props)
+  const { visible, show, hide, toggle, exposed } = useDialog(props, {
+    emits: {
+      onOk: () => {},
+      onCancel: () => {},
+    } 
+  })
 </script>
 ```
 
@@ -101,9 +106,14 @@ interface VueC2CWithTemplateOptions {
   import { c2cWithTemplate } from 'vue-c2c'
   import Dialog from './Dialog.vue'
 
-  const useDialog = c2cWithTemplate(Dialog)
+  const useDialog = c2cWithTemplate(Dialog, VueC2CWithTemplateOptions)
 
-  const { template: Placeholder, visible, show, hide, toggle, exposed } = useDialog(props)
+  const { template: Placeholder, visible, show, hide, toggle, exposed } = useDialog(props, {
+    emits: {
+      onOk: () => {},
+      onCancel: () => {},
+    } 
+  })
 </script>
 
 <template>
