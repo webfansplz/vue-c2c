@@ -34,10 +34,10 @@ export type VueC2COptions<T> = {
    */
   visible?: boolean
   /**
-   * Return the component that allows specifying the insertion position.
+   * Return a placeholder component that allows specifying the insertion position.
    * @default false
    */
-  withComponent?: T
+  withPlaceholder?: T
 } & (T extends false ? {
   /**
    * Function that returns an HTMLElement where the component should be appended to.
@@ -46,4 +46,4 @@ export type VueC2COptions<T> = {
   appendTo?: () => HTMLElement
 } : {})
 
-export type VueC2CReturn<T extends ComponentType, COMPONENT> = (props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) => VueC2CComposableReturn & (COMPONENT extends true ? { VComponent: ShallowRef<any> } : {})
+export type VueC2CReturn<T extends ComponentType, PLACEHOLDER> = (props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) => VueC2CComposableReturn & (PLACEHOLDER extends true ? { Placeholder: ShallowRef<any> } : {})

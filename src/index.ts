@@ -19,7 +19,7 @@ export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?
 
 // implementation
 export function c2c<T extends ComponentType>(componentConstructor: T, options?: VueC2COptions<boolean>): VueC2CReturn<T, boolean> {
-  return options?.withComponent ? _c2cWithComponent(componentConstructor, options as VueC2COptions<true>) : _c2c(componentConstructor, options as VueC2COptions<false>)
+  return options?.withPlaceholder ? _c2cWithComponent(componentConstructor, options as VueC2COptions<true>) : _c2c(componentConstructor, options as VueC2COptions<false>)
 }
 
 function _c2c<T extends ComponentType>(componentConstructor: T, options: VueC2COptions<false> = {}): VueC2CReturn<T, boolean> {
@@ -105,12 +105,12 @@ function _c2cWithComponent<T extends ComponentType>(componentConstructor: T, opt
   } = options
 
   function composable(props?: ComponentPropTypes<T>, opt?: VueC2CComposableOptions<T>) {
-    const VComponent = shallowRef()
+    const Placeholder = shallowRef()
     const visible = ref(options.visible ?? false)
     const exposed = ref()
 
     if (display === 'v-if') {
-      VComponent.value = defineComponent({
+      Placeholder.value = defineComponent({
         setup(_, { slots }) {
           return () => {
             // Providing an 'emits' option for better callability makes sense, even if it already exists in props.
@@ -124,7 +124,7 @@ function _c2cWithComponent<T extends ComponentType>(componentConstructor: T, opt
       })
     }
     else {
-      VComponent.value = defineComponent({
+      Placeholder.value = defineComponent({
         setup(_, { slots }) {
           return () => {
             const vnode = createVNode(componentConstructor as ComponentPropTypes<T>, { ...unref(props), ...opt?.emits }, slots)
@@ -157,7 +157,7 @@ function _c2cWithComponent<T extends ComponentType>(componentConstructor: T, opt
       show,
       hide,
       toggle,
-      VComponent,
+      Placeholder,
     }
   }
   return composable
