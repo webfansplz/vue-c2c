@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "vue": "^3.2.47",
-    "vue-c2c": "workspace:*"
+    "vue-c2c": "^0.0.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
