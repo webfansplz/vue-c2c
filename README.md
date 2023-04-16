@@ -1,6 +1,16 @@
-# vue-c2c
+<p align="center">
+ <h1>vue-c2c</h1>
+</p>
 
-Transforming Vue components to composable functions.
+<p align="center">
+<b>Transforming Vue components to composable functions <br/>
+ Draw UI with components, Access/Control with composables</b>
+</p>
+
+
+<p align="center">
+<a href="https://stackblitz.com/edit/vue-c2c?embed=1&file=src/App.vue"><img src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" alt=""></a>
+</p>
 
 ## When should I use this?
 
