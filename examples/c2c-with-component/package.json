@@ -1,5 +1,5 @@
 {
-  "name": "c2c-with-template-example",
+  "name": "c2c-with-component-example",
   "private": true,
   "scripts": {
     "dev": "vite",
