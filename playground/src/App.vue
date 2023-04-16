@@ -3,21 +3,23 @@ import { ref } from 'vue'
 import { c2c } from '../../src'
 import Confirm from './components/Confirm.vue'
 
-// function fc(props: { content: string;onUpdate?: () => void }, context) {
-//   context.emit('update')
+// function fc(props: { content: string;onUpdate?: () => void }) {
+//   // context.emit('update')
 //   return h('div', props.content)
 // }
 // fc.props = ['content']
 // fc.emits = ['update']
 const useConfirm = c2c(Confirm)
 
-// const useFC = c2cWithTemplate(fc)
+// const useFC = c2c(fc, {
+//   withTemplate: true,
+// })
 
 const props = ref({
   content: '1',
 })
 
-// const { toggle, template: Placeholder } = useFC({
+// const { toggle } = useFC({
 //   content: 'Hi',
 // }, {
 //   emits: {
