@@ -1,7 +1,7 @@
 {
   "name": "vue-c2c",
   "type": "module",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "packageManager": "pnpm@7.30.0",
   "description": "Transforming Vue components to composable functions",
   "author": "webfansplz",
