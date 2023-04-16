@@ -5,18 +5,24 @@
  Draw UI with components, Access/Control with composables</b>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/vue-c2c" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/npm/v/vue-c2c" alt="NPM Version" /></a>
+  <a href="https://github.com/webfansplz/vue-c2c/blob/master/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/webfansplz/vue-c2c" alt="License" /></a>
+</p>
 
 <p align="center">
 <a href="https://stackblitz.com/edit/vue-c2c?embed=1&file=src/App.vue"><img src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" alt=""></a>
 </p>
 
-## When should I use this?
-
-In certain use cases (e.g. Confirm、Dialog), composable functions can provide greater flexibility and ease of use than components. 
 
 <p align="left">
   <img src="./vue-c2c.png" alt="vue-c2c" />
 </p>
+
+## When should I use this?
+
+In certain use cases (e.g. confirm, dialog, toast), composable functions can provide greater flexibility and ease of use than components. 
+
 
 ## Install
 
