@@ -44,7 +44,7 @@ interface VueC2COptions {
    */
   display?: 'v-if' | 'v-show'
   /**
-   * Display style of the component.
+   * Visible of the component.
    * @default false
    */
   visible?: boolean
