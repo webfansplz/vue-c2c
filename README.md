@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/vue-c2c" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/npm/v/vue-c2c" alt="NPM Version" /></a>
-  <a href="https://github.com/webfansplz/vue-c2c/blob/master/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/webfansplz/vue-c2c" alt="License" /></a>
+  <a href="https://github.com/webfansplz/vue-c2c/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/webfansplz/vue-c2c" alt="License" /></a>
 </p>
 
 <p align="center">
