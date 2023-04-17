@@ -1,12 +1,17 @@
-import { expect, it } from 'vitest'
+import { expect, expectTypeOf, it } from 'vitest'
+import type { Ref } from 'vue'
 import { defineComponent, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { c2c } from '../src'
 
 const Confirm = defineComponent({
   props: {
-    content: String,
+    content: {
+      type: String,
+      required: true,
+    },
   },
+  emits: ['submit', 'cancel'],
   setup(props) {
     return () => h('div', null, props.content)
   },
@@ -32,7 +37,11 @@ it('should work w/ withPlaceholder option', async () => {
   const props = ref({
     content: 'Hi',
   })
-  const { toggle, Placeholder } = useConfirm(props)
+  const { toggle, Placeholder } = useConfirm(props, {
+    emits: {
+      onSubmit: () => { },
+    },
+  })
 
   const wrapper = mount({
     render() {
@@ -41,6 +50,13 @@ it('should work w/ withPlaceholder option', async () => {
       ])
     },
   })
+
+  expectTypeOf(useConfirm).parameter(0).toEqualTypeOf<({
+    content: string
+  } | Ref<{
+    content: string
+  }> | undefined)>()
+
   expect(wrapper.text()).toBe('')
   toggle()
   await nextTick()
