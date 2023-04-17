@@ -1,6 +1,5 @@
 import type { DefineComponent, ExtractPropTypes, FunctionalComponent, Ref, ShallowRef } from 'vue'
 
-type MaybeRef<T> = T | Ref<T>
 export type VueC2CFunctionalComponent = FunctionalComponent<any, any>
 export type ComponentConstructor = (abstract new (...args: any) => any)
 export type ComponentType = ComponentConstructor | VueC2CFunctionalComponent
@@ -12,7 +11,11 @@ type ComponentEmitTypes<T extends (event: any, ...args: any[]) => void> = T exte
   [K in R as `on${Capitalize<K>}`]: (...args: any[]) => void
 } : Record<any, any>) : Record<any, any>
 export type ComponentPropTypes<T extends ComponentType> =
-  T extends ComponentConstructor ? (T extends DefineComponent<infer P, any, any> ? MaybeRef<ExtractPropTypes<P>> : MaybeRef<InstanceType<T>['$props']>) : FunctionalComponentPropTypes<T>
+  T extends ComponentConstructor ? (T extends DefineComponent<infer P, any, any> ? (P extends {} ? {
+    [PP in keyof ExtractPropTypes<P>]: ExtractPropTypes<P>[PP]
+  } | Ref<{
+    [PP in keyof ExtractPropTypes<P>]: ExtractPropTypes<P>[PP]
+  }> : {}) : {}) : FunctionalComponentPropTypes<T>
 
 export interface VueC2CComposableReturn<T extends ComponentType> {
   exposed: Ref<T extends DefineComponent<infer P, infer EXPOSE, any> ? EXPOSE : {}>
