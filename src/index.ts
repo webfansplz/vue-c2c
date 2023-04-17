@@ -1,8 +1,8 @@
 import { createCommentVNode, createVNode, defineComponent, nextTick, ref, render, shallowRef, unref, vShow, watch, withDirectives } from 'vue'
 import type {
+  ComponentConstructor,
   ComponentPropTypes,
   ComponentType,
-  VueC2CComponent,
   VueC2CComposableOptions,
   VueC2CFunctionalComponent,
   VueC2COptions,
@@ -13,9 +13,9 @@ export type { VueC2COptions, VueC2CReturn } from './type'
 
 // overloads
 export function c2c<T extends VueC2CFunctionalComponent>(componentConstructor: T, options?: VueC2COptions<false>): VueC2CReturn<T, false>
-export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?: VueC2COptions<false>): VueC2CReturn<T, false>
+export function c2c<T extends ComponentConstructor>(componentConstructor: T, options?: VueC2COptions<false>): VueC2CReturn<T, false>
 export function c2c<T extends VueC2CFunctionalComponent>(componentConstructor: T, options?: VueC2COptions<true>): VueC2CReturn<T, true>
-export function c2c<T extends VueC2CComponent>(componentConstructor: T, options?: VueC2COptions<true>): VueC2CReturn<T, true>
+export function c2c<T extends ComponentConstructor>(componentConstructor: T, options?: VueC2COptions<true>): VueC2CReturn<T, true>
 
 // implementation
 export function c2c<T extends ComponentType>(componentConstructor: T, options?: VueC2COptions<boolean>): VueC2CReturn<T, boolean> {
