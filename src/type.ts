@@ -1,5 +1,15 @@
 import type { DefineComponent, ExtractPropTypes, FunctionalComponent, Ref, ShallowRef } from 'vue'
 
+type RequiredKeys<T> = {
+  [K in keyof T]: T[K] extends {
+    required: true
+  } | {
+    default: any
+  } | BooleanConstructor | {
+    type: BooleanConstructor
+  } ? T[K] extends { default: undefined | (() => undefined) } ? never : K : never;
+}[keyof T]
+type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>
 export type VueC2CFunctionalComponent = FunctionalComponent<any, any>
 export type ComponentConstructor = (abstract new (...args: any) => any)
 export type ComponentType = ComponentConstructor | VueC2CFunctionalComponent
@@ -11,11 +21,11 @@ type ComponentEmitTypes<T extends (event: any, ...args: any[]) => void> = T exte
   [K in R as `on${Capitalize<K>}`]: (...args: any[]) => void
 } : Record<any, any>) : Record<any, any>
 export type ComponentPropTypes<T extends ComponentType> =
-  T extends ComponentConstructor ? (T extends DefineComponent<infer P, any, any> ? (P extends {} ? {
-    [PP in keyof ExtractPropTypes<P>]: ExtractPropTypes<P>[PP]
-  } | Ref<{
-    [PP in keyof ExtractPropTypes<P>]: ExtractPropTypes<P>[PP]
-  }> : {}) : {}) : FunctionalComponentPropTypes<T>
+  T extends ComponentConstructor ? (T extends DefineComponent<infer P, any, any> ? (P extends {} ? ({
+    [PP in keyof Pick<P, RequiredKeys<P>>]: ExtractPropTypes<P>[PP]
+  } & { [PP in keyof Pick<P, OptionalKeys<P>>]?: ExtractPropTypes<P>[PP] }) | (Ref<({
+    [PP in keyof Pick<P, RequiredKeys<P>>]: ExtractPropTypes<P>[PP]
+  } & { [PP in keyof Pick<P, OptionalKeys<P>>]?: ExtractPropTypes<P>[PP] })>) : {}) : {}) : FunctionalComponentPropTypes<T>
 
 export interface VueC2CComposableReturn<T extends ComponentType> {
   exposed: Ref<T extends DefineComponent<infer P, infer EXPOSE, any> ? EXPOSE : {}>
