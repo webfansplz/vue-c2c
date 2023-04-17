@@ -12,7 +12,7 @@ import Confirm from './components/Confirm.vue'
 const useConfirm = c2c(Confirm)
 
 // const useFC = c2c(fc, {
-//   withTemplate: true,
+//   withPlaceholder: true,
 // })
 
 const props = ref({
